@@ -4,6 +4,14 @@
         <meta charset="utf-8">
         <title>D3 Test</title>
         <script type="text/javascript" src="d3.v3/d3.v3.js"></script>
+        <style>
+        div.bar {
+    display: inline-block;
+    width: 20px;
+    height: 75px;   /* We'll override this later */
+    background-color: red;
+    margin-right:2px;
+}</style>
 </head>
 <body>
 .
@@ -11,7 +19,12 @@
 </p>
     <script type="text/javascript">
 		var dataset = [ 5, 10, 15, 20, 25, 30, 20, "A" ];
-		d3.select("body").selectAll("p").data(dataset).enter().append("li").text(function(anything) { return ".." + anything; });
-    </script>
-
+		d3.select("body").selectAll("div")
+		    .data(dataset)
+		    .enter()
+		    .append("div")
+		    .attr("class", "bar").style("height", function(d) {
+    return d*5 + "px";
+});;
+        </script>
 </body>
