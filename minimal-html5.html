@@ -8,18 +8,10 @@
 <body>
 .
 <p>
-<svg width="700" height="400" style="border:1px solid;">
-	<text x="50" y="50" text-color="red">
-	svg part
-	</text>
-</svg>
 </p>
     <script type="text/javascript">
-		d3.select("body").insert("p").text("before paragraph!");
-		d3.select("body").append("p").text("after paragraph!");
-		//d3.selectAll("p").append("p").text("everywhere!");
-		var dataset = [ 5, 10, 15, 20, 25 ];
-		d3.select("body").selectAll("p").data(dataset).enter().append("p").text("ea@");
+		var dataset = [ 5, 10, 15, 20, 25, 30, 20, "A" ];
+		d3.select("body").selectAll("p").data(dataset).enter().append("li").text(function(anything) { return ".." + anything; });
     </script>
 
 </body>
