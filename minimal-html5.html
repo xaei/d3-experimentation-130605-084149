@@ -7,7 +7,7 @@
         <style>
         div.bar {
     display: inline-block;
-    width: 20px;
+    width: 10px;
     height: 75px;   /* We'll override this later */
     background-color: red;
     margin-right:2px;
@@ -18,7 +18,11 @@
 <p>
 </p>
     <script type="text/javascript">
-		var dataset = [ 5, 10, 15, 20, 25, 30, 20, "A" ];
+var dataset = [];                        //Initialize empty array
+for (var i = 0; i < 250; i++) {           //Loop 25 times
+    var newNumber = Math.round(Math.random() * 21);  //New random number (0-30)
+    dataset.push(newNumber);             //Add new number to array
+}
 		d3.select("body").selectAll("div")
 		    .data(dataset)
 		    .enter()
@@ -27,4 +31,14 @@
     return d*5 + "px";
 });;
         </script>
+        <svg width="600px" height="200px" style="border:1px solid red;">
+        	<rect x="0" y="0" width="500" height="10" fill="red"/>
+        	<circle cx="250" cy="25" r="25" fill="orange" />
+        	<ellipse cx="400" cy="25" rx="100" ry="25"/>
+        	<line x1="0" y1="0" x2="500" y2="50" stroke="blue" stroke-width="10" opacity=".5"/>
+        	<text x="400" y="100">what the what</text>
+        	<circle cx="25" cy="25" r="22" fill="yellow" stroke="orange" stroke-width="5"/>
+
+
+        </svg>
 </body>
