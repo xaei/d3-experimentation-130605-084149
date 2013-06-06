@@ -18,20 +18,42 @@
 <p>
 </p>
     <script type="text/javascript">
-var dataset = [];                        //Initialize empty array
-for (var i = 0; i < 250; i++) {           //Loop 25 times
-    var newNumber = Math.round(Math.random() * 21);  //New random number (0-30)
-    dataset.push(newNumber);             //Add new number to array
-}
+    //Width and height
+		var w = 900;
+		var h = 200;
+		var dataset = [];                        //Initialize empty array
+		for (var i = 0; i < 250; i++) {           //Loop 25 times
+		    var newNumber = Math.round(Math.random() * 21);  //New random number (0-30)
+		    dataset.push(newNumber);             //Add new number to array
+		}
 		d3.select("body").selectAll("div")
 		    .data(dataset)
 		    .enter()
 		    .append("div")
 		    .attr("class", "bar").style("height", function(d) {
-    return d*5 + "px";
-});;
+		    return d*5 + "px";
+			});
+		var svg = d3.select("body").append("svg").attr("width",w).attr("height", h);
+		var circles = svg.selectAll("circle")
+                 .data(dataset)
+                 .enter()
+                 .append("circle");
+	    circles.attr("cx", function(d, i) {
+            return (i*5) + 25;
+        })
+       .attr("cy", h/2)
+       .attr("fill", "gray")
+       .attr("opacity", 0.5)
+       .attr("r", function(d) {
+            return d*.5;
+       }).attr("fill", "yellow")
+.attr("stroke", "orange")
+.attr("stroke-width", function(d) {
+    return d/2;
+});                 
+
         </script>
-        <svg width="600px" height="200px" style="border:1px solid red;">
+        <svg width="600px" height="200px" style="border:none;">
         	<rect x="0" y="0" width="500" height="10" fill="red"/>
         	<circle cx="250" cy="25" r="25" fill="orange" />
         	<ellipse cx="400" cy="25" rx="100" ry="25"/>
