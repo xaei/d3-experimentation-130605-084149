@@ -125,11 +125,18 @@
 				.domain([0,d3.max(dataset, function(d){return d[0];})])
 				.range([50,255]);
 
-				svgGraph.selectAll("circle").data(dataset).transition().duration(2000).ease("elastic").delay(function(d, i) {return ( 1000 * i / dataset.length) ;})
+				svgGraph.selectAll("circle").data(dataset).transition().duration(2000).ease("elastic").delay(function(d, i) {return ( 3000 * i / dataset.length) ;})
+				.each("start", function() {      // <-- Executes at start of transition
+					d3.select(this)
+					.attr("fill", "magenta")
+					.attr("opacity", ".01")
+					.attr("r", 3);
+					})
 		        .attr("cx", function(d){ return xScaleA(d[0]);})
 				.attr("cy", function(d){ return yScaleA(d[1]);})
 				.attr("r", function(d){ return rScaleA(Math.random()*100);})
 				.attr("opacity", function(d){ return oScaleA(d[1])*Math.random()+.5 })
+
 				.attr("fill", function(d){ return "rgb("+Math.round(cScaleA(d[0]))+","+Math.round(cScaleA(d[1]))+",0)";});
 
 			   var xAxis=d3.svg.axis().scale(xScaleA).orient("bottom").ticks(10);
