@@ -76,8 +76,8 @@
 	   .attr("font-face", "bold")
 	   .attr("fill", "gray");*/
 
-	   var xAxis=d3.svg.axis().scale(xScaleA).orient("bottom").ticks(50).tickFormat(d3.format("^03r.3"));
-	   var yAxis=d3.svg.axis().scale(yScaleA).orient("left").ticks(10).tickFormat(d3.time.format("%Y-%m-%d"));
+	   var xAxis=d3.svg.axis().scale(xScaleA).orient("bottom").ticks(50).tickFormat(d3.format("^02d"));
+	   var yAxis=d3.svg.axis().scale(yScaleA).orient("left").ticks(10).tickFormat(d3.format("^03d"));
 
 
 	   var axisA = svgGraph
