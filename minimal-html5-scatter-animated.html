@@ -82,7 +82,7 @@
 	   .attr("font-size", "8px")
 	   .attr("font-face", "bold")
 	   .attr("fill", "gray");
-*/
+		*/
 	   var xAxis=d3.svg.axis().scale(xScaleA).orient("bottom").ticks(10);
 	   var yAxis=d3.svg.axis().scale(yScaleA).orient("left").ticks(10);
 
@@ -99,13 +99,22 @@
 	   .attr("transform", "translate(" + padding + ",0)")
 	   .call(yAxis);
 
+	   var lineData=dataset;
+	   var lineFunction=d3.svg.line().x(function(d) { return d[0];}).y(function(d) { return d[1]});
+	   //.interpolate("bezier");
+	   var paths = svgGraph.selectAll("path").data(dataset).enter().append("path")
+	   .attr("d", lineFunction(lineData))
+	   .attr("stroke", "red")
+	   .attr("stroke-width", "1");
+
 //updates here
 //		xScaleA=d3.scale.ordinal().domain(d3.range(dataset.length)).rangeRoundBands([0,w],.1);
 //		yScaleA=d3.scale.ordinal().domain(d3.range(dataset.length)).rangeRoundBands([0,w],.1);
 		d3.select("p")
 		    .on("click", function() {
 		        dataset=refreshData();
-		        				var xScaleA = d3.scale.linear()
+				
+				var xScaleA = d3.scale.linear()
 				.domain([0,d3.max(dataset, function(d){return d[0];})])
 				.range([padding, w-padding]);
 
