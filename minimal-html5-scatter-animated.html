@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+        <meta charset="utf-8">
+        <title>scatter d3</title>
+        <script type="text/javascript" src="./d3.v3/d3.v3.js"></script>
+        <style>
+
+        .axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: sans-serif;
+    font-size: 10px;
+}
+</style>
+</head>
+<body>
+	<p>update here</p>
+
+    <script type="text/javascript">
+    //Width and height
+		var w = 1000;
+		var h = 700;
+		var barPadding=1;
+		var padding=50;
+		function refreshData(){
+			var dataset = [];                        //Initialize empty array
+			for (var i = 0; i < 1000; i++) {           //Loop 25 times
+			    var newNumber1 = Math.round(Math.random() * 100);  //New random number (0-30)
+			    var newNumber2 = Math.round(Math.random() * 100);  //New random number (0-30)
+			    dataset.push([newNumber1,newNumber2]);             //Add new number pair to array
+			}
+			return dataset;
+		}
+		dataset=refreshData();
+		var xScaleA = d3.scale.linear()
+		.domain([0,d3.max(dataset, function(d){return d[0];})])
+		.range([padding, w-padding]);
+
+		var yScaleA = d3.scale.linear()
+		.domain([0,d3.max(dataset, function(d){return d[1];})])
+		.range([h-padding, padding]);
+
+		var rScaleA= d3.scale.linear()
+		.domain([0,d3.max(dataset, function(d){return d[1];})])
+		.range([0,20]);
+
+		var oScaleA= d3.scale.linear()
+		.domain([0,d3.max(dataset, function(d){return d[1];})])
+		.range([0.0,0.8]);
+
+		var cScaleA= d3.scale.linear()
+		.domain([0,d3.max(dataset, function(d){return d[0];})])
+		.range([50,255]);
+
+		var svgGraph = d3.select("body").append("svg").attr("width", w).attr("height", h);
+
+		var circles = svgGraph.selectAll("circle").data(dataset).enter().append("circle")
+		.attr("cx", function(d){ return xScaleA(d[0]);})
+		.attr("cy", function(d){ return yScaleA(d[1]);})
+		.attr("r", function(d){ return rScaleA(Math.random()*100);})
+		.attr("opacity", function(d){ return oScaleA(d[1])*Math.random()+.5 })
+		.attr("fill", function(d){ return "rgb("+Math.round(cScaleA(d[0]))+","+Math.round(cScaleA(d[1]))+",0)";});
+
+		var labels = svgGraph.selectAll("text").data(dataset).enter().append("text")
+		.text(function(d){return d[0]+","+d[1]})
+	    .attr("x", function(d,i) {
+        return xScaleA(d[0])-12;
+	    })
+	    .attr("y", function(d) {
+        return yScaleA(d[1])+15;
+	    })
+	   .attr("font-family", "sans-serif")
+	   .attr("font-size", "8px")
+	   .attr("font-face", "bold")
+	   .attr("fill", "gray");
+
+	   var xAxis=d3.svg.axis().scale(xScaleA).orient("bottom").ticks(10);
+	   var yAxis=d3.svg.axis().scale(yScaleA).orient("left").ticks(10);
+
+
+	   var axisA = svgGraph
+	   .append("g")
+	   .attr("class","axis")
+       .attr("transform", "translate(0," + (h - padding) + ")")
+	   .call(xAxis);
+
+	   var axisB = svgGraph
+	   .append("g")
+	   .attr("class","axis")
+	   .attr("transform", "translate(" + padding + ",0)")
+	   .call(yAxis);
+//updates here
+//		xScaleA=d3.scale.ordinal().domain(d3.range(dataset.length)).rangeRoundBands([0,w],.1);
+//		yScaleA=d3.scale.ordinal().domain(d3.range(dataset.length)).rangeRoundBands([0,w],.1);
+		d3.select("p")
+		    .on("click", function() {
+		        dataset=refreshData();
+		        svgGraph.selectAll("circle").data(dataset).transition()
+		        .attr("cx", function(d){ return xScaleA(d[0]);})
+				.attr("cy", function(d){ return yScaleA(d[1]);})
+				.attr("r", function(d){ return rScaleA(Math.random()*100);})
+				.attr("opacity", function(d){ return oScaleA(d[1])*Math.random()+.5 })
+				.attr("fill", function(d){ return "rgb("+Math.round(cScaleA(d[0]))+","+Math.round(cScaleA(d[1]))+",0)";});
+			    });
+        </script>
+</body>
