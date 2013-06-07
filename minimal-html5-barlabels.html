@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+        <meta charset="utf-8">
+        <title>D3 Test</title>
+        <script type="text/javascript" src="d3.v3/d3.v3.js"></script>
+        
+</head>
+<body>
+.
+    <script type="text/javascript">
+    //Width and height
+		var w = 900;
+		var h = 500;
+		var barPadding=1;
+		var dataset = [];                        //Initialize empty array
+		for (var i = 0; i < 200; i++) {           //Loop 25 times
+		    var newNumber = Math.round(Math.random() * 151);  //New random number (0-30)
+		    dataset.push(newNumber);             //Add new number to array
+		}
+		
+		var svg2 = d3.select("body").append("svg").attr("width", w).attr("height", h);
+		var bars = svg2.selectAll("rect").data(dataset).enter().append("rect")
+		.attr("x", function(d,i){ return i*(w/dataset.length)})
+		.attr("y", function(d,i){ return h-2*d})
+		.attr("width", (w/(dataset.length-barPadding)-2))
+		.attr("height",  function(d){return 2*d})
+		.attr("opacity", 0.1)
+		.attr("fill", "black");
+
+		var labels = svg2.selectAll("text").data(dataset).enter().append("text")
+		.text(function(d) {
+		return d;
+		}).attr("x", function(d, i) {
+        return i * (w / dataset.length) + 0.5* (w/dataset.length-barPadding);
+	    })
+	    .attr("y", function(d,i) {
+	         return 10 + 20 * (i%5);
+	    })
+       .attr("font-family", "sans-serif")
+	   .attr("font-size", "8px")
+	   .attr("fill", "black")
+       .attr("text-anchor", "middle");
+
+        </script>
+
+</body>
