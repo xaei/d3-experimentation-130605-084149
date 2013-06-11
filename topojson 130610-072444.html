@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<style>
+body {
+  font: 10px sans-serif;
+}
+/*.subunit.SCT { fill: #ddc; }
+.subunit.WLS { fill: #cdd; }
+.subunit.NIR { fill: #cdc; }
+.subunit.ENG { fill: #dcd; }
+.subunit.IRL { display: none; }
+.subunit.DEU { fill: #dcd; }
+.subunit.ESX { fill: #dcd; }
+.subunit.FXX { fill: #dcd; }*/
+.subunit {fill: #000;}
+
+.subunit-boundary {
+  fill: none;
+  stroke: #fff;
+  stroke-dasharray: 5,5;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.subunit-boundary-internal {
+	fill:none;
+	stroke: #555;
+	stroke-width: 2;
+}
+
+.place-label{
+  font: 9px sans-serif;
+  fill: #F00;
+
+}
+.place, .place-label {
+  fill: #d00;
+
+}
+
+text {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  pointer-events: none;
+}
+
+.container {
+	border:1px solid black;
+}
+</style>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+</head>
+<body>
+	<P>start</p>
+<script>
+
+var w=1500;
+var h=1200;
+
+var projection = d3.geo.albers()
+    .center([010, 40.6])
+    .rotate([4.4, 0])
+    .parallels([20,40])
+    .scale(1200)
+    .translate([w / 2, h / 2]);
+
+var path=d3.geo.path().projection(projection).pointRadius(2);
+
+var svgContainer=d3.select("body").append("svg")
+	.attr("width", w)
+	.attr("height", h)
+	.attr("class","container");
+
+d3.json("esp.json", function(error, esp){
+	var subunits=topojson.feature(esp,esp.objects.subunits).features;
+
+	svgContainer.selectAll(".subunit")
+    .data(subunits)
+	.enter().append("path")
+    .attr("class", function(d) { return "subunit " + d.id; })
+    .attr("d", path);
+
+	svgContainer.append("path")
+	    .datum(topojson.mesh(esp, esp.objects.subunits, function(a, b) { return a !== b; }))
+	    .attr("d", path)
+	    .attr("class", "subunit-boundary");
+
+	svgContainer.append("path")
+	    .datum(topojson.mesh(esp, esp.objects.subunits, function(a, b) { return a === b; }))
+	    .attr("d", path)
+	    .attr("class", "subunit-boundary-internal");
+
+	svgContainer.append("path")
+    .datum(topojson.feature(esp, esp.objects.places))
+    .attr("d", path.pointRadius(3))
+    .attr("class", "place");
+
+	svgContainer.selectAll(".place-label")
+	    .data(topojson.feature(esp, esp.objects.places).features)
+		.enter().append("text")
+	    .attr("class", "place-label")
+	    .attr("transform", function(d) { return "translate(" + projection(d.geometry.coordinates) + ")"; })
+	    .attr("dy", ".35em")
+	    .attr("dx", "0.5em")
+	    .text(function(d) { return d.properties.name; });
+
+    svgContainer.selectAll(".place-label")
+	    .attr("x", function(d) { return d.geometry.coordinates[0] > -3 ? 4 : -4; })
+	    .style("text-anchor", function(d) { return d.geometry.coordinates[0] > -3 ? "start" : "end"; });
+});
+ 
+</script>
+<P>end</p></body>
+</html>

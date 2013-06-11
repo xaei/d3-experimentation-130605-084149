@@ -33,7 +33,7 @@
 			var maxY=Math.round(Math.random()*300);
 
 			var dataset = [];                        //Initialize empty array
-			for (var i = 0; i < 1000; i++) {           //Loop 25 times
+			for (var i = 0; i < 100; i++) {           //Loop 25 times
 			    var newNumber1 = Math.round(Math.random() * maxX);  //New random number (0-30)
 			    var newNumber2 = Math.round(Math.random() * maxY);  //New random number (0-30)
 			    dataset.push([newNumber1,newNumber2]);             //Add new number pair to array
@@ -86,6 +86,14 @@
 	   var xAxis=d3.svg.axis().scale(xScaleA).orient("bottom").ticks(10);
 	   var yAxis=d3.svg.axis().scale(yScaleA).orient("left").ticks(10);
 
+	   var lineFunction=d3.svg.line().x(function(d) { return xScaleA(d[0]);}).y(function(d) { return yScaleA(d[1])}).interpolate("cardinal");
+	   var paths = svgGraph.selectAll("path").data(dataset).enter().append("path")
+	   .attr("d", lineFunction(dataset))
+	   .attr("stroke", "red")
+	   .attr("stroke-width", "1")
+	   .attr("fill", "none")
+	   .attr("opacity", 0.5);
+
 
 	   var axisA = svgGraph
 	   .append("g")
@@ -99,13 +107,6 @@
 	   .attr("transform", "translate(" + padding + ",0)")
 	   .call(yAxis);
 
-	   var lineData=dataset;
-	   var lineFunction=d3.svg.line().x(function(d) { return d[0];}).y(function(d) { return d[1]});
-	   //.interpolate("bezier");
-	   var paths = svgGraph.selectAll("path").data(dataset).enter().append("path")
-	   .attr("d", lineFunction(lineData))
-	   .attr("stroke", "red")
-	   .attr("stroke-width", "1");
 
 //updates here
 //		xScaleA=d3.scale.ordinal().domain(d3.range(dataset.length)).rangeRoundBands([0,w],.1);
@@ -133,8 +134,18 @@
 				var cScaleA= d3.scale.linear()
 				.domain([0,d3.max(dataset, function(d){return d[0];})])
 				.range([50,255]);
+			   
+			   var lineFunction=d3.svg.line().x(function(d) { return xScaleA(d[0]);}).y(function(d) { return yScaleA(d[1])}).interpolate("cardinal");
 
-				svgGraph.selectAll("circle").data(dataset).transition().duration(2000).ease("elastic").delay(function(d, i) {return ( 3000 * i / dataset.length) ;})
+			   var paths = svgGraph.selectAll("path").data(dataset).transition().duration(1000)
+			   .attr("d", lineFunction(dataset))
+		   	   .attr("class","path1")
+			   .attr("stroke", "red")
+			   .attr("stroke-width", "1")
+			   .attr("fill", "none")
+			   .attr("opacity", 0.5);
+
+				svgGraph.selectAll("circle").data(dataset).transition().duration(1000).ease("elastic").delay(function(d, i) {return ( 3000 * i / dataset.length) ;})
 				.each("start", function() {      // <-- Executes at start of transition
 					d3.select(this)
 					.attr("fill", "magenta")
@@ -164,7 +175,6 @@
 				    .duration(1000)
 				    .ease("bounce")
 				    .call(yAxis);
-			
 			});
 
         </script>
